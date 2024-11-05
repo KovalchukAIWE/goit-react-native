@@ -15,19 +15,13 @@ import { colors } from "../styles/global";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
-import AddIcon from "../assets/images/svg/AddIcon";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 
-const RegistrationScreen = () => {
-  const [login, setLogin] = useState("");
+const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
-
-  const handleLoginChange = (value: string) => {
-    setLogin(value);
-  };
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -41,14 +35,11 @@ const RegistrationScreen = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  const onRegister = () => {
-    console.log(
-      "Credentials",
-      `login: ${login}, email: ${email}, password: ${password}`
-    );
+  const onLogin = () => {
+    console.log("Credentials", `email: ${email}, password: ${password}`);
   };
 
-  const onLogin = () => {
+  const onRegister = () => {
     console.log("Login");
   };
 
@@ -67,19 +58,9 @@ const RegistrationScreen = () => {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
         <View style={styles.formContainer}>
-          <View style={styles.avatarContainer}>
-            <AddIcon width="25" height="25" style={styles.plusIcon}></AddIcon>
-          </View>
-          <Text style={styles.title}>Реєстрація</Text>
+          <Text style={styles.title}>Увійти</Text>
 
           <View style={[styles.innerContainer, styles.inputContainer]}>
-            <Input
-              value={login}
-              autofocus={true}
-              placeholder="Логін"
-              onTextChange={handleLoginChange}
-            />
-
             <Input
               value={email}
               autofocus={true}
@@ -98,17 +79,15 @@ const RegistrationScreen = () => {
           </View>
 
           <View style={[styles.innerContainer, styles.buttonContainer]}>
-            <Button onPress={onRegister}>
-              <Text style={[styles.baseText, styles.buttonText]}>
-                Зареєстуватися
-              </Text>
+            <Button onPress={onLogin}>
+              <Text style={[styles.baseText, styles.buttonText]}>Увійти</Text>
             </Button>
 
             <View style={styles.loginContainer}>
               <Text style={[styles.baseText, styles.passwordButtonText]}>
-                Вже є акаунт?&ensp;
-                <TouchableWithoutFeedback onPress={onLogin}>
-                  <Text style={styles.blueText}>Увійти</Text>
+                Немає акаунту?&ensp;
+                <TouchableWithoutFeedback onPress={onRegister}>
+                  <Text style={styles.blueText}>Зареєструватися</Text>
                 </TouchableWithoutFeedback>
               </Text>
             </View>
@@ -119,7 +98,7 @@ const RegistrationScreen = () => {
   );
 };
 
-export default RegistrationScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,27 +117,12 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: SCREEN_WIDTH,
-    height: "60%",
+    height: "50%",
     backgroundColor: colors.white,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     paddingHorizontal: 16,
-    paddingTop: 92,
-  },
-  avatarContainer: {
-    position: "relative",
-    marginTop: -152,
-    marginBottom: 32,
-    alignSelf: "center",
-    width: 120,
-    height: 120,
-    backgroundColor: colors.light_gray,
-    borderRadius: 16,
-  },
-  plusIcon: {
-    position: "absolute",
-    bottom: 14,
-    right: -12,
+    paddingTop: 32,
   },
   title: {
     fontSize: 30,
