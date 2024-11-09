@@ -1,8 +1,9 @@
-import { FC, useState, useEffect } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { FC, useState } from "react";
+import { NativeStackScreenProps } from "react-native-screens/lib/typescript/native-stack/types";
 import { StackParamList } from "../navigation/StackNavigator";
+
 import {
-  ImageBackground,
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -17,34 +18,43 @@ import { styles } from "../styles/css";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
-type LoginScreenProps = NativeStackScreenProps<StackParamList, "Login">;
+type HomeScreenProps = NativeStackScreenProps<StackParamList, "Login">;
 
-const LoginScreen: FC<LoginScreenProps> = ({ navigation, route }) => {
+const LoginScreen: FC<HomeScreenProps> = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [keyboardStatus, setKeyboardStatus] = useState(false);
 
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => setKeyboardStatus(true));
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => setKeyboardStatus(false));
+  const keyboardHide = () => {
+    setKeyboardStatus(false);
+    Keyboard.dismiss();
+  };
 
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    setKeyboardStatus(true);
+  };
 
-  const handleEmailChange = (value: string) => setEmail(value);
-  const handlePasswordChange = (value: string) => setPassword(value);
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    setKeyboardStatus(true);
+  };
 
-  const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
+  const showPassword = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
 
-  const onLogin = () => navigation.navigate("Home");
-  const onRegister = () => navigation.navigate("Registration", { userEmail: email });
+  const onLogin = () => {
+    navigation.navigate("Home");
+  };
+
+  const onRegister = () => {
+    navigation.navigate("Registration", { userEmail: email });
+  };
 
   const showButton = (
-    <TouchableOpacity onPress={togglePasswordVisibility}>
+    <TouchableOpacity onPress={showPassword}>
       <Text style={[styles.baseText, styles.passwordButtonText]}>
         {isPasswordVisible ? "Показати" : "Приховати"}
       </Text>
@@ -52,20 +62,22 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation, route }) => {
   );
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ImageBackground
-        source={require("../assets/images/bg.png")}
-        resizeMode="cover"
-        style={styles.image}
-      >
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={styles.containerForKeyboard}>
+        <Image
+          source={require("../assets/images/bg.png")}
+          resizeMode="cover"
+          style={styles.image}
+        />
+
         <KeyboardAvoidingView
           style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
           <View
             style={{
               ...styles.formContainerLogin,
-              height: keyboardStatus ? "50%" : "55%",
+              height: keyboardStatus ? "60%" : "50%",
             }}
           >
             <Text style={styles.title}>Увійти</Text>
@@ -73,7 +85,6 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation, route }) => {
             <View style={[styles.innerContainer, styles.inputContainer]}>
               <Input
                 value={email}
-                autofocus={true}
                 placeholder="Адреса електронної пошти"
                 onTextChange={handleEmailChange}
               />
@@ -96,15 +107,15 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation, route }) => {
               <View style={styles.loginContainer}>
                 <Text style={[styles.baseText, styles.passwordButtonText]}>
                   Немає акаунту?&ensp;
-                  <TouchableOpacity onPress={onRegister}>
+                  <TouchableWithoutFeedback onPress={onRegister}>
                     <Text style={styles.linkText}>Зареєструватися</Text>
-                  </TouchableOpacity>
+                  </TouchableWithoutFeedback>
                 </Text>
               </View>
             </View>
           </View>
         </KeyboardAvoidingView>
-      </ImageBackground>
+      </View>
     </TouchableWithoutFeedback>
   );
 };

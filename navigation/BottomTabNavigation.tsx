@@ -7,19 +7,18 @@ import PostsScreen from "../screens/PostsScreen";
 
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 
 import { colors } from "../styles/global";
 import { styles } from "../styles/css";
 import ProfileScreen from "../screens/ProfileScreen";
 import CreatePostsScreen from "../screens/CreatePostsScreen";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator(); // вказує на групу навігаторів
 
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="PostsScreen"
+      initialRouteName="Post"
       screenOptions={({ navigation }) => ({
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
@@ -34,17 +33,17 @@ const BottomTabNavigator = () => {
       backBehavior="history"
     >
       <Tab.Screen
-        name="PostsScreen"
+        name="Posts"
         component={PostsScreen}
         options={({ navigation }) => ({
           title: "Публікації",
 
           headerRight: () => (
             <TouchableOpacity style={styles.logoutBtn}>
-              <MaterialIcons
-                name="logout"
+              <Feather
+                name="log-out"
                 size={24}
-                color={colors.underline_grey}
+                color={colors.underline_gray}
                 onPress={() =>
                   navigation.navigate("Login", { screen: "Login" })
                 }
@@ -52,62 +51,59 @@ const BottomTabNavigator = () => {
             </TouchableOpacity>
           ),
           tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign
-              name="appstore-o"
+            <Feather
+              name="grid"
               size={24}
-              color={focused ? colors.white : colors.underline_grey}
+              color={focused ? colors.white : colors.underline_gray}
             />
           ),
         })}
       />
 
       <Tab.Screen
-        name="CreatePostsScreen"
+        name="CreatePost"
         component={CreatePostsScreen}
         options={({ navigation }) => ({
           title: "Створити публікацію",
 
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons
-                name="arrow-back"
-                size={24}
-                color={colors.underline_grey}
-              />
+              <Ionicons name="arrow-back" size={24} color={colors.black80} />
             </TouchableOpacity>
           ),
           tabBarIcon: ({ focused, color, size }) => (
             <AntDesign
               name="plus"
               size={24}
-              color={focused ? colors.white : colors.underline_grey}
+              color={focused ? colors.white : colors.underline_gray}
             />
           ),
+          tabBarStyle: { display: "none" },
         })}
       />
       <Tab.Screen
-        name="ProfileScreen"
+        name="Profile"
         component={ProfileScreen}
         options={({ navigation }) => ({
           title: "",
 
           headerRight: () => (
             <TouchableOpacity style={styles.logoutBtn}>
-              <MaterialIcons
-                name="logout"
+              <Feather
+                name="log-out"
                 size={24}
-                color={colors.underline_grey}
+                color={colors.underline_gray}
                 onPress={() =>
                   navigation.navigate("Login", { screen: "Login" })
                 }
               />
             </TouchableOpacity>
           ),
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Feather
               name="user"
               size={24}
-              color={focused ? colors.white : colors.underline_grey}
+              color={focused ? colors.white : colors.underline_gray}
             />
           ),
         })}

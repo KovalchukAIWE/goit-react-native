@@ -25,7 +25,7 @@ export default function App() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" />; // Показуй індикатор завантаження
+    return <ActivityIndicator size="large" />;
   }
 
   return (
